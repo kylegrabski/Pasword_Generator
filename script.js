@@ -131,10 +131,17 @@ function generatePassword() {
   }
 
   // Confirm to the user what parameters they want for their password
-  isSpecial = confirm("Would you like to include special characters?");
-  isNumber = confirm("Would you like to include numbers?");
-  isUpper = confirm("Would you like to include upper case characters?");
   isLower = confirm("Would you like to include lower case characters?");
+  isUpper = confirm("Would you like to include upper case characters?");
+  isNumber = confirm("Would you like to include numbers?");
+  isSpecial = confirm("Would you like to include special characters?");
+
+  // If user doesnt choose any parameter, alerts and reset
+  if (!isLower && !isUpper && !isNumber && !isSpecial) {
+    alert("You must choose at least one option");
+    reset();
+    return;
+  }
 
   for (var i = 0; i < length; i++) {
     var element = "";
