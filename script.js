@@ -84,10 +84,10 @@ var upperCasedCharacters = [
   "Y",
   "Z",
 ];
-// created an empty array that the element in the generatePassword function will push into. 
+// created an empty array on global scope that the element in the generatePassword function will push into.
 var randomSelection = [];
 
-// reset properties to start over
+// reset properties function to start generator over, or else it retains the data and will produce the same password
 function reset() {
   length = "";
   isLower = false;
@@ -98,62 +98,75 @@ function reset() {
   randomSelection = [];
 }
 
-
 var generateBtn = document.querySelector("#generate");
 
 generateBtn.addEventListener("click", writePassword);
 
 function writePassword() {
-  // removed "var password = generatePassword();" because my password is picked from the randomSelection array
   generatePassword();
-  // Returned the array as a string without commas, and slice the length given by the user
+  // Returned the array as a string without commas, and slice by the length given by the user
   password = randomSelection.join("").slice(0, length);
   var passwordText = document.querySelector("#password");
   passwordText.value = password;
+  // checking password length to make sure its working
+  console.log(password.length);
 }
-
 
 function generatePassword() {
   reset();
   // Prompt user for password length
-  length = prompt(
-    "Enter desired length of your Generated Password" +
-      "\n MUST BE BETWEEN 8 AND 128 CHARACTERS IN LENGTH"
-      // Make sure that password length between 8 and 128(inclusive)
-  ); if (length < 8 || length > 128) {
+  length = prompt("Choose a password length between 8 and 128");
+
+  // if the user choose less than 8 or more than 128, alert and reset
+  if (length < 8 || length > 128) {
     alert("The Password needs to be between 8 and 128 characters in length");
     reset();
     return;
   }
-  //   Using a confirm prompt the user for special characters
+  // if the user doesnt type a digit, alert and reset
+  if (isNaN(length)) {
+    alert("Please enter a numerical digit");
+    reset();
+    return;
+  }
+
+  // Confirm to the user what parameters they want for their password
   isSpecial = confirm("Would you like to include special characters?");
-  //   Using a confirm prompt the user for numeric characters
   isNumber = confirm("Would you like to include numbers?");
-  //   Using a confirm prompt the user for uppercase characters
   isUpper = confirm("Would you like to include upper case characters?");
-  //   Using a confirm prompt the user for lowercase characters
-  isLower = confirm("Would you like to include lower case characters?"); 
-  // Algo for password generation goes below
+  isLower = confirm("Would you like to include lower case characters?");
+
   for (var i = 0; i < length; i++) {
     var element = "";
-    if(isSpecial) {
-      element += getRandomItem(specialCharacters);randomSelection.push(element);element = "";
-    }if (isNumber) {
-      element += getRandomItem(numericCharacters);randomSelection.push(element);element = "";
-    }if (isUpper) {
-      element += getRandomItem(upperCasedCharacters);randomSelection.push(element);element = "";
-    }if (isLower) {
-      element += getRandomItem(lowerCasedCharacters);randomSelection.push(element);element = "";
+    // is the += necessary? = works fine as well...
+    // Will go through the charRandomizer function for each parameter the user chose,push the selection to the element, then clear the element.
+    if (isSpecial) {
+      element += charRandomizer(specialCharacters);
+      randomSelection.push(element);
+      element = "";
     }
+    if (isNumber) {
+      element += charRandomizer(numericCharacters);
+      randomSelection.push(element);
+      element = "";
+    }
+    if (isUpper) {
+      element += charRandomizer(upperCasedCharacters);
+      randomSelection.push(element);
+      element = "";
+    }
+    if (isLower) {
+      element += charRandomizer(lowerCasedCharacters);
+      randomSelection.push(element);
+      element = "";
+    }
+    // console.log for testing
     console.log(randomSelection.join(""));
   }
-  // return the build password
-  // return element;
 }
 
-
 // Retrieve a random item from the provided array
-function getRandomItem(arr) {
+function charRandomizer(arr) {
   // Generate a random index from 0 to the length - 1 of our array
   var randomIndex = Math.random() * arr.length;
   // round down our random index
@@ -161,5 +174,6 @@ function getRandomItem(arr) {
   // return the random item based off of our random index
   return arr[randomIndex];
 }
-  // One liner of the above code
-  // return arr[Math.floor(Math.random() * arr.length)];
+
+// One liner of the above code
+// return arr[Math.floor(Math.random() * arr.length)];
