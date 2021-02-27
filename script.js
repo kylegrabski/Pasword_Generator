@@ -87,6 +87,16 @@ var upperCasedCharacters = [
 // created an empty array that the element in the generatePassword function will push into. 
 var randomSelection = [];
 
+// reset properties to start over
+function reset() {
+  length = "";
+  isLower = false;
+  isUpper = false;
+  isNumber = false;
+  isSpecial = false;
+  password = "";
+  randomSelection = [];
+}
 
 
 var generateBtn = document.querySelector("#generate");
@@ -104,6 +114,7 @@ function writePassword() {
 
 
 function generatePassword() {
+  reset();
   // Prompt user for password length
   length = prompt(
     "Enter desired length of your Generated Password" +
