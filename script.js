@@ -24,8 +24,30 @@ var specialCharacters = [
   "_",
   ".",
 ];
-// Array of numeric characters to be included in password
-var numericCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+// Array of numeric characters to be included in password.
+// Doubled the numbers to help even the probability between numbers, symbols, and alphabet
+var numericCharacters = [
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+];
 // Array of lowercase characters to be included in password
 var lowerCasedCharacters = [
   "a",
@@ -87,7 +109,7 @@ var upperCasedCharacters = [
 // created an empty array on global scope that the element in the generatePassword function will push into.
 var randomSelection = [];
 
-// reset properties function to start generator over, or else it retains the data and will produce the same password
+// reset function will start generator over, or else the application retains the data and will produce the same password
 function reset() {
   length = "";
   isLower = false;
@@ -109,15 +131,15 @@ function writePassword() {
   var passwordText = document.querySelector("#password");
   passwordText.value = password;
   // checking password length to make sure its working
-  console.log(password.length);
 }
 
 function generatePassword() {
   reset();
+
   // Prompt user for password length
   length = prompt("Choose a password length between 8 and 128");
 
-  // if the user choose less than 8 or more than 128, alert and reset
+  // if the user chose less than 8 or more than 128, alert and reset
   if (length < 8 || length > 128) {
     alert("The Password needs to be between 8 and 128 characters in length");
     reset();
@@ -129,12 +151,27 @@ function generatePassword() {
     reset();
     return;
   }
+  var selectedArray = [];
+
+  // Made it so everything gets pushed into an array first, then randomly chosen from there.
 
   // Confirm to the user what parameters they want for their password
   isLower = confirm("Would you like to include lower case characters?");
+  if (isLower) {
+    selectedArray.push(lowerCasedCharacters);
+  }
   isUpper = confirm("Would you like to include upper case characters?");
+  if (isUpper) {
+    selectedArray.push(upperCasedCharacters);
+  }
   isNumber = confirm("Would you like to include numbers?");
+  if (isNumber) {
+    selectedArray.push(numericCharacters);
+  }
   isSpecial = confirm("Would you like to include special characters?");
+  if (isSpecial) {
+    selectedArray.push(specialCharacters);
+  }
 
   // If user doesnt choose any parameter, alerts and reset
   if (!isLower && !isUpper && !isNumber && !isSpecial) {
@@ -142,34 +179,17 @@ function generatePassword() {
     reset();
     return;
   }
-
+  // changing the array into a string, then randomly choosing the password from that string
+  
+  selectedArray = selectedArray.flat().join("");
+  console.log(selectedArray);
   for (var i = 0; i < length; i++) {
     var element = "";
-    // is the += necessary? = works fine as well...
-    // Will go through the charRandomizer function for each parameter the user chose,push the selection to the element, then clear the element.
-    if (isSpecial) {
-      element += charRandomizer(specialCharacters);
-      randomSelection.push(element);
-      element = "";
-    }
-    if (isNumber) {
-      element += charRandomizer(numericCharacters);
-      randomSelection.push(element);
-      element = "";
-    }
-    if (isUpper) {
-      element += charRandomizer(upperCasedCharacters);
-      randomSelection.push(element);
-      element = "";
-    }
-    if (isLower) {
-      element += charRandomizer(lowerCasedCharacters);
-      randomSelection.push(element);
-      element = "";
-    }
-    // console.log for testing
-    console.log(randomSelection.join(""));
+    element += element + charRandomizer(selectedArray);
+    randomSelection.push(element);
   }
+  console.log(selectedArray);
+  randomSelection.push(element);
 }
 
 // Retrieve a random item from the provided array
