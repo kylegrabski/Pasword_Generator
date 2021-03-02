@@ -179,7 +179,7 @@ function generatePassword() {
     reset();
     return;
   }
-  // changing the array into a string, then randomly choosing the password from that string
+  // Concate the arrays, then randomly choosing the password 
   
   selectedArray = selectedArray.flat().join("");
   console.log(selectedArray);
@@ -201,6 +201,3 @@ function charRandomizer(arr) {
   // return the random item based off of our random index
   return arr[randomIndex];
 }
-
-// One liner of the above code
-// return arr[Math.floor(Math.random() * arr.length)];
